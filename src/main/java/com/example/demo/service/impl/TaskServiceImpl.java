@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void sendMessage() {
-        List<BemMenuDo> bemMenu = taskMapper.getBemMenu();
+        List<BemMenuDo> bemMenu = taskMapper.getBemMenu();//获取对象
         ProducerRecord<String , Object> record = null;
         for (BemMenuDo bemMenuDo : bemMenu) {
             record = new ProducerRecord<String, Object>(TOPIC, bemMenuDo);
@@ -51,7 +51,7 @@ public class TaskServiceImpl implements TaskService {
             producer.send(record, new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                    if (null != e){
+                    if (e != null){
                         log.info("send error" + e.getMessage());
                     }else {
                         System.out.println(String.format("offset:%s,partition:%s",recordMetadata.offset(),recordMetadata.partition()));
